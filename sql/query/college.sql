@@ -2,7 +2,7 @@
 -- name: InsertDepartment :one
 
 insert into departments (
-  _name  , hod_id
+  name  , hod_id
 ) values  (
   $1 , $2
 ) returning *;
@@ -10,7 +10,7 @@ insert into departments (
 
 -- name: InsertInstructor :one
 insert into instructors (
-  _name  
+  name  
 ) values (
   $1
 ) returning *;
@@ -18,14 +18,14 @@ insert into instructors (
 
 -- name: InsertStudent :one
 insert into students (
-  _name
+  name
 ) values (
   $1
 ) returning *;
 
 -- name: InsertCourse :one
 insert into courses (
-  _name , department_id , instructor_id
+  name , department_id , instructor_id
 ) values (
   $1 , $2 , $3
 ) returning *;

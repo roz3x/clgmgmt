@@ -5,25 +5,24 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const insertCourse = `-- name: InsertCourse :one
 insert into courses (
-  _name , department_id , instructor_id
+  name , department_id , instructor_id
 ) values (
   $1 , $2 , $3
-) returning id, _name, department_id, instructor_id
+) returning id, name, department_id, instructor_id
 `
 
 type InsertCourseParams struct {
-	Name         sql.NullString `json:"_name"`
-	DepartmentID sql.NullInt32  `json:"department_id"`
-	InstructorID sql.NullInt32  `json:"instructor_id"`
+	Name         string `json:"name"`
+	DepartmentID int32  `json:"department_id"`
+	InstructorID int32  `json:"instructor_id"`
 }
 
 func (q *Queries) InsertCourse(ctx context.Context, arg InsertCourseParams) (Course, error) {
-	row := q.queryRow(ctx, q.insertCourseStmt, insertCourse, arg.Name, arg.DepartmentID, arg.InstructorID)
+	row := q.db.QueryRowContext(ctx, insertCourse, arg.Name, arg.DepartmentID, arg.InstructorID)
 	var i Course
 	err := row.Scan(
 		&i.ID,
@@ -37,19 +36,19 @@ func (q *Queries) InsertCourse(ctx context.Context, arg InsertCourseParams) (Cou
 const insertDepartment = `-- name: InsertDepartment :one
 
 insert into departments (
-  _name  , hod_id
+  name  , hod_id
 ) values  (
   $1 , $2
-) returning id, _name, hod_id
+) returning id, name, hod_id
 `
 
 type InsertDepartmentParams struct {
-	Name  sql.NullString `json:"_name"`
-	HodID sql.NullInt32  `json:"hod_id"`
+	Name  string `json:"name"`
+	HodID int32  `json:"hod_id"`
 }
 
 func (q *Queries) InsertDepartment(ctx context.Context, arg InsertDepartmentParams) (Department, error) {
-	row := q.queryRow(ctx, q.insertDepartmentStmt, insertDepartment, arg.Name, arg.HodID)
+	row := q.db.QueryRowContext(ctx, insertDepartment, arg.Name, arg.HodID)
 	var i Department
 	err := row.Scan(&i.ID, &i.Name, &i.HodID)
 	return i, err
@@ -64,12 +63,12 @@ insert into enroll (
 `
 
 type InsertEnrollParams struct {
-	StudentID sql.NullInt32 `json:"student_id"`
-	CourseID  sql.NullInt32 `json:"course_id"`
+	StudentID int32 `json:"student_id"`
+	CourseID  int32 `json:"course_id"`
 }
 
 func (q *Queries) InsertEnroll(ctx context.Context, arg InsertEnrollParams) (Enroll, error) {
-	row := q.queryRow(ctx, q.insertEnrollStmt, insertEnroll, arg.StudentID, arg.CourseID)
+	row := q.db.QueryRowContext(ctx, insertEnroll, arg.StudentID, arg.CourseID)
 	var i Enroll
 	err := row.Scan(&i.StudentID, &i.CourseID)
 	return i, err
@@ -77,14 +76,14 @@ func (q *Queries) InsertEnroll(ctx context.Context, arg InsertEnrollParams) (Enr
 
 const insertInstructor = `-- name: InsertInstructor :one
 insert into instructors (
-  _name  
+  name  
 ) values (
   $1
-) returning id, _name
+) returning id, name
 `
 
-func (q *Queries) InsertInstructor(ctx context.Context, Name sql.NullString) (Instructor, error) {
-	row := q.queryRow(ctx, q.insertInstructorStmt, insertInstructor, Name)
+func (q *Queries) InsertInstructor(ctx context.Context, name string) (Instructor, error) {
+	row := q.db.QueryRowContext(ctx, insertInstructor, name)
 	var i Instructor
 	err := row.Scan(&i.ID, &i.Name)
 	return i, err
@@ -92,14 +91,14 @@ func (q *Queries) InsertInstructor(ctx context.Context, Name sql.NullString) (In
 
 const insertStudent = `-- name: InsertStudent :one
 insert into students (
-  _name
+  name
 ) values (
   $1
-) returning id, _name
+) returning id, name
 `
 
-func (q *Queries) InsertStudent(ctx context.Context, Name sql.NullString) (Student, error) {
-	row := q.queryRow(ctx, q.insertStudentStmt, insertStudent, Name)
+func (q *Queries) InsertStudent(ctx context.Context, name string) (Student, error) {
+	row := q.db.QueryRowContext(ctx, insertStudent, name)
 	var i Student
 	err := row.Scan(&i.ID, &i.Name)
 	return i, err

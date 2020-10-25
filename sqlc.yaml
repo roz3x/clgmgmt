@@ -6,7 +6,6 @@ packages:
     queries:  "sql/query/"
     engine: "postgresql"
     emit_json_tags: true
-    emit_prepared_queries: true
+    emit_prepared_queries: false 
     emit_interface: false
     emit_exact_table_names: false
-    emit_empty_slices: false
