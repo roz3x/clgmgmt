@@ -28,6 +28,15 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.insertDepartmentStmt, err = db.PrepareContext(ctx, insertDepartment); err != nil {
 		return nil, fmt.Errorf("error preparing query InsertDepartment: %w", err)
 	}
+	if q.insertEnrollStmt, err = db.PrepareContext(ctx, insertEnroll); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertEnroll: %w", err)
+	}
+	if q.insertInstructorStmt, err = db.PrepareContext(ctx, insertInstructor); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertInstructor: %w", err)
+	}
+	if q.insertStudentStmt, err = db.PrepareContext(ctx, insertStudent); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertStudent: %w", err)
+	}
 	return &q, nil
 }
 
@@ -41,6 +50,21 @@ func (q *Queries) Close() error {
 	if q.insertDepartmentStmt != nil {
 		if cerr := q.insertDepartmentStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing insertDepartmentStmt: %w", cerr)
+		}
+	}
+	if q.insertEnrollStmt != nil {
+		if cerr := q.insertEnrollStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertEnrollStmt: %w", cerr)
+		}
+	}
+	if q.insertInstructorStmt != nil {
+		if cerr := q.insertInstructorStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertInstructorStmt: %w", cerr)
+		}
+	}
+	if q.insertStudentStmt != nil {
+		if cerr := q.insertStudentStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertStudentStmt: %w", cerr)
 		}
 	}
 	return err
@@ -84,6 +108,9 @@ type Queries struct {
 	tx                   *sql.Tx
 	insertCourseStmt     *sql.Stmt
 	insertDepartmentStmt *sql.Stmt
+	insertEnrollStmt     *sql.Stmt
+	insertInstructorStmt *sql.Stmt
+	insertStudentStmt    *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
@@ -92,5 +119,8 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		tx:                   tx,
 		insertCourseStmt:     q.insertCourseStmt,
 		insertDepartmentStmt: q.insertDepartmentStmt,
+		insertEnrollStmt:     q.insertEnrollStmt,
+		insertInstructorStmt: q.insertInstructorStmt,
+		insertStudentStmt:    q.insertStudentStmt,
 	}
 }

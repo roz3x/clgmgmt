@@ -7,14 +7,29 @@ import (
 )
 
 type Course struct {
-	Name         sql.NullString `json:"name"`
 	ID           int64          `json:"id"`
-	InstructorID sql.NullInt32  `json:"instructor_id"`
+	Name         sql.NullString `json:"_name"`
 	DepartmentID sql.NullInt32  `json:"department_id"`
+	InstructorID sql.NullInt32  `json:"instructor_id"`
 }
 
 type Department struct {
 	ID    int64          `json:"id"`
-	Name  sql.NullString `json:"name"`
+	Name  sql.NullString `json:"_name"`
 	HodID sql.NullInt32  `json:"hod_id"`
+}
+
+type Enroll struct {
+	StudentID sql.NullInt32 `json:"student_id"`
+	CourseID  sql.NullInt32 `json:"course_id"`
+}
+
+type Instructor struct {
+	ID   int64          `json:"id"`
+	Name sql.NullString `json:"_name"`
+}
+
+type Student struct {
+	ID   int64          `json:"id"`
+	Name sql.NullString `json:"_name"`
 }
