@@ -1,0 +1,32 @@
+body {
+	padding: 0 2em;
+	font-family: monospace;
+	text-rendering: optimizeLegibility;
+	color: #444;
+	background: #eee;
+}
+
+
+h1 {
+	font-weight: normal;
+	letter-spacing: -1px;
+	color: #34495e;
+}
+
+.thetable {
+	background: #34495e;
+	color: #fff;
+	border-radius: .4em;
+	overflow: hidden;
+}
+
+.thetable > tr {
+	border-color: lighten(#34495e, 10%);
+}
+
+.thetable > td , td {
+	margin: .5em 1em;
+}
+.thetable > td , td :before{
+	margin: .5em 1em;
+}
