@@ -1,5 +1,5 @@
 create table departments (
-  id bigserial primary key,
+  id bigserial primary key auto increment,
   name text not null,
   hod_id int not null
 );
