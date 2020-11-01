@@ -1,12 +1,16 @@
 body {
 	padding: 0 2em;
-	font-family: monospace;
+	font-family: system-ui;
 	text-rendering: optimizeLegibility;
 	color: #444;
 	background: #eee;
 }
 
-
+#nav {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
 h1 {
 	font-weight: normal;
 	letter-spacing: -1px;

@@ -28,6 +28,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.insertDepartmentStmt, err = db.PrepareContext(ctx, insertDepartment); err != nil {
 		return nil, fmt.Errorf("error preparing query InsertDepartment: %w", err)
 	}
+	if q.selectStudentsStmt, err = db.PrepareContext(ctx, selectStudents); err != nil {
+		return nil, fmt.Errorf("error preparing query SelectStudents: %w", err)
+	}
 	return &q, nil
 }
 
@@ -41,6 +44,11 @@ func (q *Queries) Close() error {
 	if q.insertDepartmentStmt != nil {
 		if cerr := q.insertDepartmentStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing insertDepartmentStmt: %w", cerr)
+		}
+	}
+	if q.selectStudentsStmt != nil {
+		if cerr := q.selectStudentsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing selectStudentsStmt: %w", cerr)
 		}
 	}
 	return err
@@ -84,6 +92,7 @@ type Queries struct {
 	tx                   *sql.Tx
 	insertCourseStmt     *sql.Stmt
 	insertDepartmentStmt *sql.Stmt
+	selectStudentsStmt   *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
@@ -92,5 +101,6 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		tx:                   tx,
 		insertCourseStmt:     q.insertCourseStmt,
 		insertDepartmentStmt: q.insertDepartmentStmt,
+		selectStudentsStmt:   q.selectStudentsStmt,
 	}
 }

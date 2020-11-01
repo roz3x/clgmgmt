@@ -2,19 +2,27 @@
 
 package db
 
-import (
-	"database/sql"
-)
+import ()
 
 type Course struct {
-	Name         sql.NullString `json:"name"`
-	ID           int64          `json:"id"`
-	InstructorID sql.NullInt32  `json:"instructor_id"`
-	DepartmentID sql.NullInt32  `json:"department_id"`
+	Name         string `json:"name"`
+	ID           int64  `json:"id"`
+	InstructorID int32  `json:"instructor_id"`
+	DepartmentID int32  `json:"department_id"`
 }
 
 type Department struct {
-	ID    int64          `json:"id"`
-	Name  sql.NullString `json:"name"`
-	HodID sql.NullInt32  `json:"hod_id"`
+	ID    int64  `json:"id"`
+	Name  string `json:"name"`
+	HodID int32  `json:"hod_id"`
+}
+
+type Instructor struct {
+	Name string `json:"name"`
+	ID   int64  `json:"id"`
+}
+
+type Student struct {
+	Name string `json:"name"`
+	ID   int64  `json:"id"`
 }

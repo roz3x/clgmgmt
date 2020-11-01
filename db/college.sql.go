@@ -5,7 +5,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const insertCourse = `-- name: InsertCourse :one
@@ -17,8 +16,8 @@ insert into  courses (
 `
 
 type InsertCourseParams struct {
-	Name         sql.NullString `json:"name"`
-	DepartmentID sql.NullInt32  `json:"department_id"`
+	Name         string `json:"name"`
+	DepartmentID int32  `json:"department_id"`
 }
 
 func (q *Queries) InsertCourse(ctx context.Context, arg InsertCourseParams) (Course, error) {
@@ -43,8 +42,8 @@ insert into departments
 `
 
 type InsertDepartmentParams struct {
-	Name  sql.NullString `json:"name"`
-	HodID sql.NullInt32  `json:"hod_id"`
+	Name  string `json:"name"`
+	HodID int32  `json:"hod_id"`
 }
 
 func (q *Queries) InsertDepartment(ctx context.Context, arg InsertDepartmentParams) (Department, error) {
@@ -52,4 +51,31 @@ func (q *Queries) InsertDepartment(ctx context.Context, arg InsertDepartmentPara
 	var i Department
 	err := row.Scan(&i.ID, &i.Name, &i.HodID)
 	return i, err
+}
+
+const selectStudents = `-- name: SelectStudents :many
+select name, id from students
+`
+
+func (q *Queries) SelectStudents(ctx context.Context) ([]Student, error) {
+	rows, err := q.query(ctx, q.selectStudentsStmt, selectStudents)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Student
+	for rows.Next() {
+		var i Student
+		if err := rows.Scan(&i.Name, &i.ID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

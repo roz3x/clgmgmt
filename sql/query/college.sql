@@ -15,4 +15,7 @@ insert into  courses (
   $1 , $2 
 ) returning *;
 
+-- name: SelectStudents :many 
+select * from students;
+
 
