@@ -1,4 +1,5 @@
-const hostUrl = window.location.href;
+
+const hostUrl = "http://localhost:8080";
 
 window.onload = () => {
   console.log("startedd......")
@@ -13,11 +14,9 @@ function showStudents() {
   console.log("showing students table");
 
   fetch(hostUrl+"/students")
-  .then(res => res.json())
-  .then(
-    console.log(res)
-
-  );
+  .then(res =>  {
+    console.log(res);
+  })
 }
 
 function showDepatments() {
