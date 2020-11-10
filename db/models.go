@@ -17,12 +17,21 @@ type Department struct {
 	HodID int32  `json:"hod_id"`
 }
 
+type Enroll struct {
+	StudentID int32 `json:"student_id"`
+	CourseID  int32 `json:"course_id"`
+}
+
 type Instructor struct {
-	Name string `json:"name"`
-	ID   int64  `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Age   int32  `json:"age"`
+	ID    int64  `json:"id"`
 }
 
 type Student struct {
-	Name string `json:"name"`
-	ID   int64  `json:"id"`
+	Name  string `json:"name"`
+	Age   int32  `json:"age"`
+	Email string `json:"email"`
+	ID    int64  `json:"id"`
 }

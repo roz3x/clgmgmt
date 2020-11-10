@@ -1,6 +1,8 @@
+* {
+	font-family: system-ui;
+}
 body {
 	padding: 0 2em;
-	font-family: system-ui;
 	text-rendering: optimizeLegibility;
 	color: #444;
 	background: #eee;
@@ -9,28 +11,24 @@ body {
 #nav {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: space-evenly;
 }
-h1 {
-	font-weight: normal;
-	letter-spacing: -1px;
-	color: #34495e;
-}
+
 
 .thetable {
 	background: #34495e;
 	color: #fff;
 	border-radius: .4em;
 	overflow: hidden;
+	display: flex;
+	place-items: center;
+	margin: 10% 0 ;
 }
 
-.thetable > tr {
-	border-color: lighten(#34495e, 10%);
-}
-
-.thetable > td , td {
-	margin: .5em 1em;
-}
-.thetable > td , td :before{
-	margin: .5em 1em;
+#d {
+  text-align: left;
+  display: flex;
+	flex-direction: column;
+	place-items: center;
+	margin: 10px 0;
 }

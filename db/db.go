@@ -28,6 +28,27 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.insertDepartmentStmt, err = db.PrepareContext(ctx, insertDepartment); err != nil {
 		return nil, fmt.Errorf("error preparing query InsertDepartment: %w", err)
 	}
+	if q.insertEnrollStmt, err = db.PrepareContext(ctx, insertEnroll); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertEnroll: %w", err)
+	}
+	if q.insertInstructorStmt, err = db.PrepareContext(ctx, insertInstructor); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertInstructor: %w", err)
+	}
+	if q.insertStudentStmt, err = db.PrepareContext(ctx, insertStudent); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertStudent: %w", err)
+	}
+	if q.selectCoursesStmt, err = db.PrepareContext(ctx, selectCourses); err != nil {
+		return nil, fmt.Errorf("error preparing query SelectCourses: %w", err)
+	}
+	if q.selectDepartmentStmt, err = db.PrepareContext(ctx, selectDepartment); err != nil {
+		return nil, fmt.Errorf("error preparing query SelectDepartment: %w", err)
+	}
+	if q.selectEnrollStmt, err = db.PrepareContext(ctx, selectEnroll); err != nil {
+		return nil, fmt.Errorf("error preparing query SelectEnroll: %w", err)
+	}
+	if q.selectInstructorStmt, err = db.PrepareContext(ctx, selectInstructor); err != nil {
+		return nil, fmt.Errorf("error preparing query SelectInstructor: %w", err)
+	}
 	if q.selectStudentsStmt, err = db.PrepareContext(ctx, selectStudents); err != nil {
 		return nil, fmt.Errorf("error preparing query SelectStudents: %w", err)
 	}
@@ -44,6 +65,41 @@ func (q *Queries) Close() error {
 	if q.insertDepartmentStmt != nil {
 		if cerr := q.insertDepartmentStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing insertDepartmentStmt: %w", cerr)
+		}
+	}
+	if q.insertEnrollStmt != nil {
+		if cerr := q.insertEnrollStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertEnrollStmt: %w", cerr)
+		}
+	}
+	if q.insertInstructorStmt != nil {
+		if cerr := q.insertInstructorStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertInstructorStmt: %w", cerr)
+		}
+	}
+	if q.insertStudentStmt != nil {
+		if cerr := q.insertStudentStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertStudentStmt: %w", cerr)
+		}
+	}
+	if q.selectCoursesStmt != nil {
+		if cerr := q.selectCoursesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing selectCoursesStmt: %w", cerr)
+		}
+	}
+	if q.selectDepartmentStmt != nil {
+		if cerr := q.selectDepartmentStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing selectDepartmentStmt: %w", cerr)
+		}
+	}
+	if q.selectEnrollStmt != nil {
+		if cerr := q.selectEnrollStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing selectEnrollStmt: %w", cerr)
+		}
+	}
+	if q.selectInstructorStmt != nil {
+		if cerr := q.selectInstructorStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing selectInstructorStmt: %w", cerr)
 		}
 	}
 	if q.selectStudentsStmt != nil {
@@ -92,6 +148,13 @@ type Queries struct {
 	tx                   *sql.Tx
 	insertCourseStmt     *sql.Stmt
 	insertDepartmentStmt *sql.Stmt
+	insertEnrollStmt     *sql.Stmt
+	insertInstructorStmt *sql.Stmt
+	insertStudentStmt    *sql.Stmt
+	selectCoursesStmt    *sql.Stmt
+	selectDepartmentStmt *sql.Stmt
+	selectEnrollStmt     *sql.Stmt
+	selectInstructorStmt *sql.Stmt
 	selectStudentsStmt   *sql.Stmt
 }
 
@@ -101,6 +164,13 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		tx:                   tx,
 		insertCourseStmt:     q.insertCourseStmt,
 		insertDepartmentStmt: q.insertDepartmentStmt,
+		insertEnrollStmt:     q.insertEnrollStmt,
+		insertInstructorStmt: q.insertInstructorStmt,
+		insertStudentStmt:    q.insertStudentStmt,
+		selectCoursesStmt:    q.selectCoursesStmt,
+		selectDepartmentStmt: q.selectDepartmentStmt,
+		selectEnrollStmt:     q.selectEnrollStmt,
+		selectInstructorStmt: q.selectInstructorStmt,
 		selectStudentsStmt:   q.selectStudentsStmt,
 	}
 }

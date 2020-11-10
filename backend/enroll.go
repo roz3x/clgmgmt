@@ -9,8 +9,8 @@ import (
 	"net/http"
 )
 
-func students(w http.ResponseWriter, r *http.Request) {
-	s, err := DB.SelectStudents(context.Background())
+func enroll(w http.ResponseWriter, r *http.Request) {
+	s, err := DB.SelectEnroll(context.Background())
 	if err != nil {
 		println(err.Error())
 		return
@@ -19,13 +19,13 @@ func students(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", _s)
 }
 
-func insertStudent(w http.ResponseWriter, r *http.Request) {
+func insertEnroll(w http.ResponseWriter, r *http.Request) {
 	b, _ := ioutil.ReadAll(r.Body)
-	_s := &db.InsertStudentParams{}
+	_s := &db.InsertEnrollParams{}
 	_ = json.Unmarshal(b, _s)
-	if _, e := DB.InsertStudent(context.Background(), *_s); e != nil {
+	if _, e := DB.InsertEnroll(context.Background(), *_s); e != nil {
 		fmt.Println(e.Error())
 	} else {
-		fmt.Println("student added ", _s)
+		fmt.Println("student enrolled ", _s)
 	}
 }

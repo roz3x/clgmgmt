@@ -8,20 +8,21 @@ import (
 )
 
 const insertCourse = `-- name: InsertCourse :one
-insert into  courses (
-  name , department_id 
+insert into courses (
+  name ,  instructor_id , department_id 
 ) values (
-  $1 , $2 
+  $1 , $2 , $3
 ) returning name, id, instructor_id, department_id
 `
 
 type InsertCourseParams struct {
 	Name         string `json:"name"`
+	InstructorID int32  `json:"instructor_id"`
 	DepartmentID int32  `json:"department_id"`
 }
 
 func (q *Queries) InsertCourse(ctx context.Context, arg InsertCourseParams) (Course, error) {
-	row := q.queryRow(ctx, q.insertCourseStmt, insertCourse, arg.Name, arg.DepartmentID)
+	row := q.queryRow(ctx, q.insertCourseStmt, insertCourse, arg.Name, arg.InstructorID, arg.DepartmentID)
 	var i Course
 	err := row.Scan(
 		&i.Name,
@@ -53,8 +54,198 @@ func (q *Queries) InsertDepartment(ctx context.Context, arg InsertDepartmentPara
 	return i, err
 }
 
+const insertEnroll = `-- name: InsertEnroll :one
+insert into enroll (
+ student_id  ,  course_id 
+) values (
+  $1 , $2
+) returning student_id, course_id
+`
+
+type InsertEnrollParams struct {
+	StudentID int32 `json:"student_id"`
+	CourseID  int32 `json:"course_id"`
+}
+
+func (q *Queries) InsertEnroll(ctx context.Context, arg InsertEnrollParams) (Enroll, error) {
+	row := q.queryRow(ctx, q.insertEnrollStmt, insertEnroll, arg.StudentID, arg.CourseID)
+	var i Enroll
+	err := row.Scan(&i.StudentID, &i.CourseID)
+	return i, err
+}
+
+const insertInstructor = `-- name: InsertInstructor :one
+insert into instructors (
+ name , email , age
+) values (
+  $1 , $2 , $3
+) returning name, email, age, id
+`
+
+type InsertInstructorParams struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Age   int32  `json:"age"`
+}
+
+func (q *Queries) InsertInstructor(ctx context.Context, arg InsertInstructorParams) (Instructor, error) {
+	row := q.queryRow(ctx, q.insertInstructorStmt, insertInstructor, arg.Name, arg.Email, arg.Age)
+	var i Instructor
+	err := row.Scan(
+		&i.Name,
+		&i.Email,
+		&i.Age,
+		&i.ID,
+	)
+	return i, err
+}
+
+const insertStudent = `-- name: InsertStudent :one
+insert into students (
+  name , email , age 
+) values (
+  $1 , $2 , $3
+) returning name, age, email, id
+`
+
+type InsertStudentParams struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Age   int32  `json:"age"`
+}
+
+func (q *Queries) InsertStudent(ctx context.Context, arg InsertStudentParams) (Student, error) {
+	row := q.queryRow(ctx, q.insertStudentStmt, insertStudent, arg.Name, arg.Email, arg.Age)
+	var i Student
+	err := row.Scan(
+		&i.Name,
+		&i.Age,
+		&i.Email,
+		&i.ID,
+	)
+	return i, err
+}
+
+const selectCourses = `-- name: SelectCourses :many
+select name, id, instructor_id, department_id from courses
+`
+
+func (q *Queries) SelectCourses(ctx context.Context) ([]Course, error) {
+	rows, err := q.query(ctx, q.selectCoursesStmt, selectCourses)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Course
+	for rows.Next() {
+		var i Course
+		if err := rows.Scan(
+			&i.Name,
+			&i.ID,
+			&i.InstructorID,
+			&i.DepartmentID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const selectDepartment = `-- name: SelectDepartment :many
+select id, name, hod_id from departments
+`
+
+func (q *Queries) SelectDepartment(ctx context.Context) ([]Department, error) {
+	rows, err := q.query(ctx, q.selectDepartmentStmt, selectDepartment)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Department
+	for rows.Next() {
+		var i Department
+		if err := rows.Scan(&i.ID, &i.Name, &i.HodID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const selectEnroll = `-- name: SelectEnroll :many
+select student_id, course_id from enroll
+`
+
+func (q *Queries) SelectEnroll(ctx context.Context) ([]Enroll, error) {
+	rows, err := q.query(ctx, q.selectEnrollStmt, selectEnroll)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Enroll
+	for rows.Next() {
+		var i Enroll
+		if err := rows.Scan(&i.StudentID, &i.CourseID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const selectInstructor = `-- name: SelectInstructor :many
+select name, email, age, id from instructors
+`
+
+func (q *Queries) SelectInstructor(ctx context.Context) ([]Instructor, error) {
+	rows, err := q.query(ctx, q.selectInstructorStmt, selectInstructor)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Instructor
+	for rows.Next() {
+		var i Instructor
+		if err := rows.Scan(
+			&i.Name,
+			&i.Email,
+			&i.Age,
+			&i.ID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const selectStudents = `-- name: SelectStudents :many
-select name, id from students
+select name, age, email, id from students
 `
 
 func (q *Queries) SelectStudents(ctx context.Context) ([]Student, error) {
@@ -66,7 +257,12 @@ func (q *Queries) SelectStudents(ctx context.Context) ([]Student, error) {
 	var items []Student
 	for rows.Next() {
 		var i Student
-		if err := rows.Scan(&i.Name, &i.ID); err != nil {
+		if err := rows.Scan(
+			&i.Name,
+			&i.Age,
+			&i.Email,
+			&i.ID,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

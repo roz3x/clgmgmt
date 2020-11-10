@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func students(w http.ResponseWriter, r *http.Request) {
+func course(w http.ResponseWriter, r *http.Request) {
 	s, err := DB.SelectStudents(context.Background())
 	if err != nil {
 		println(err.Error())
@@ -19,7 +19,7 @@ func students(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", _s)
 }
 
-func insertStudent(w http.ResponseWriter, r *http.Request) {
+func insertCourses(w http.ResponseWriter, r *http.Request) {
 	b, _ := ioutil.ReadAll(r.Body)
 	_s := &db.InsertStudentParams{}
 	_ = json.Unmarshal(b, _s)
