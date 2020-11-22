@@ -17,6 +17,7 @@ func enroll(w http.ResponseWriter, r *http.Request) {
 	}
 	_s, _ := json.Marshal(s)
 	fmt.Fprintf(w, "%s", _s)
+	fmt.Println(string(_s))
 }
 
 func insertEnroll(w http.ResponseWriter, r *http.Request) {

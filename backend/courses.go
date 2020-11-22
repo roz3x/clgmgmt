@@ -10,7 +10,7 @@ import (
 )
 
 func course(w http.ResponseWriter, r *http.Request) {
-	s, err := DB.SelectStudents(context.Background())
+	s, err := DB.SelectCourses(context.Background())
 	if err != nil {
 		println(err.Error())
 		return
@@ -21,11 +21,11 @@ func course(w http.ResponseWriter, r *http.Request) {
 
 func insertCourses(w http.ResponseWriter, r *http.Request) {
 	b, _ := ioutil.ReadAll(r.Body)
-	_s := &db.InsertStudentParams{}
+	_s := &db.InsertCourseParams{}
 	_ = json.Unmarshal(b, _s)
-	if _, e := DB.InsertStudent(context.Background(), *_s); e != nil {
+	if _, e := DB.InsertCourse(context.Background(), *_s); e != nil {
 		fmt.Println(e.Error())
 	} else {
-		fmt.Println("student added ", _s)
+		fmt.Println("course added ", _s)
 	}
 }

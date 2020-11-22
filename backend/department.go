@@ -17,6 +17,7 @@ func departments(w http.ResponseWriter, r *http.Request) {
 	}
 	_s, _ := json.Marshal(s)
 	fmt.Fprintf(w, "%s", _s)
+	fmt.Println(string(_s))
 }
 
 func insertDepartments(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +27,6 @@ func insertDepartments(w http.ResponseWriter, r *http.Request) {
 	if _, e := DB.InsertDepartment(context.Background(), *_s); e != nil {
 		fmt.Println(e.Error())
 	} else {
-		fmt.Println("student added ", _s)
+		fmt.Println("department added ", _s)
 	}
 }
