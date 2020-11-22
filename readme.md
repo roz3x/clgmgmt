@@ -1,8 +1,4 @@
-<style> 
-  * {
-    font-family : monospace;
-  }
-</style>
+
 ## Project for DBMS
 
 submitted by : 
