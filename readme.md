@@ -8,7 +8,7 @@ submitted by :
 |  185513     | dikshit kaushal |
 |  185514     | ankita  |
 |  185515     | shivang upadhyay |
-|  185515     | pinki |
+|  185515     | pinki kumari|
 
 
 ### problem statement
